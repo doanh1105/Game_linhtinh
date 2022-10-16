@@ -28,7 +28,7 @@
 
                 <div class="healthbar">
                     <div class="healthbar text-center"
-                        style="background-color: red; margin: 0; color: white;" :style="{width: monterHeal +'%'}">
+                        style="background-color: red; margin: 0; color: white;" :style="{width: monsterHeal +'%'}">
 
                     </div>
                 </div>
@@ -42,9 +42,9 @@
         <section class="row controls" v-if="isNewgame">
             <div class="small-12 columns">
                 <button id="attack" @click="attack()" >ATTACK</button>
-                <button id="special-attack">SPECIAL ATTACK</button>
+                <button id="special-attack" :disabled="isspAttack || slayerHeal >= 40 " @click="spAttack()">SPECIAL ATTACK</button>
                 <button id="heal" :disabled="isHealed" @click="heal()">HEAL</button>
-                <button id="give-up" @click="giveup()">GIVE UP</button>
+                <button id="give-up"  @click="giveup()">GIVE UP</button>
             </div>
         </section>
         <section class="row log">
@@ -64,8 +64,9 @@
             data: {
               isNewgame: false,
               slayerHeal: 100,
-              monterHeal: 100,
+              monsterHeal: 100,
               isHealed: false,
+              isspAttack: false,
               resulMessage:''
               
             },
@@ -78,8 +79,8 @@
                         this.resulMessage = "Khanh guc nga";
                         this.isNewgame= false;
                    }
-                   if(this.monterHeal <= 0){
-                        this.monterHeal = 0;
+                   if(this.monsterHeal <= 0){
+                        this.monsterHeal = 0;
                         this.resulMessage = "Ngot guc nga";
                         this.isNewgame= false;
                         return;
@@ -89,7 +90,7 @@
                 },
                 slayerAttackDame(){
                     let slayerDame = Math.floor(Math.random() * 51); // dam khanh 10 dame
-                    this.monterHeal = this.monterHeal - slayerDame;
+                    this.monsterHeal = this.monsterHeal - slayerDame;
                 },
                 monterAttackDame(){
                     let monterDame = Math.floor(Math.random() * 71); // dam ngat 10 dame
@@ -99,7 +100,9 @@
             startNewgame(){
                 this.isNewgame = true;
                 this.slayerHeal = 100;
-                this.monterHeal = 100;
+                this.monsterHeal = 100;
+                this.isHealed = false;
+                this.isspAttack = false;
                 this.resulMessage = "";
             },
             giveup(){
@@ -117,6 +120,12 @@
                 if(this.monsterHeal > 100) this.monsterHeal = 100;
                 this.slayerHeal += 50;
                 if(this.slayerHeal > 100) this.slayerHeal = 100;
+            },
+            spAttack(){
+                this.isspAttack = true;
+                this.monsterHeal = 0;
+                this.resulMessage = "Thua de khanh beo";
+                this.isNewgame = false;
             }
         }
     })
