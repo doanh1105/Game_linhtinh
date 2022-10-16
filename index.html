@@ -17,7 +17,7 @@
 
                 <div class="healthbar">
                     <div class="healthbar text-center"
-                        style="background-color: red; margin: 0; color: white; width: 100%;">
+                        style="background-color: red; margin: 0; color: white;" :style="{width:slayerHeal + '%'}">
 
                     </div>
                 </div>
@@ -28,20 +28,20 @@
 
                 <div class="healthbar">
                     <div class="healthbar text-center"
-                        style="background-color: red; margin: 0; color: white;width: 100%;">
+                        style="background-color: red; margin: 0; color: white;" :style="{width: monterHeal +'%'}">
 
                     </div>
                 </div>
             </div>
         </section>
-        <section class="row controls" v-on:click="isNewgame = true" v-if="isNewgame == false">
+        <section class="row controls"  v-if="isNewgame == false">
             <div class="small-12 columns">
-                <button id="start-game">START NEW GAME</button>
+                <button id="start-game" v-on:click="startNewgame()">START NEW GAME</button>
             </div>
         </section>
         <section class="row controls" v-if="isNewgame">
             <div class="small-12 columns">
-                <button id="attack">ATTACK</button>
+                <button id="attack" @click="attack()" >ATTACK</button>
                 <button id="special-attack">SPECIAL ATTACK</button>
                 <button id="heal">HEAL</button>
                 <button id="give-up">GIVE UP</button>
@@ -51,7 +51,7 @@
             <div class="small-12 columns">
                 <ul>
                     <li>
-                       
+                       {{resulMessage}}
                     </li>
                 </ul>
             </div>
@@ -63,9 +63,46 @@
             el: '#app',
             data: {
               isNewgame: false,
+              slayerHeal: 100,
+              monterHeal: 100,
+              resulMessage:''
               
+            },
+            methods: {
+                attack(){
+                   this.slayerAttackDame();
+                   this.monterAttackDame();
+                   if(this.slayerHeal <= 0){
+                        this.slayerHeal = 0;
+                        this.resulMessage = "Khanh guc nga";
+                        this.isNewgame= false;
+                   }
+                   if(this.monterHeal <= 0){
+                        this.monterHeal = 0;
+                        this.resulMessage = "Ngot guc nga";
+                        this.isNewgame= false;
+                        return;
+                   }
+
+                    // this.slayerHeal = this.slayerHeal - 20;
+                },
+                slayerAttackDame(){
+                    let slayerDame = Math.floor(Math.random() * 101); // dam khanh 10 dame
+                    this.monterHeal = this.monterHeal - slayerDame;
+                },
+                monterAttackDame(){
+                    let monterDame = Math.floor(Math.random() * 21); // dam ngat 10 dame
+                    this.slayerHeal = this.slayerHeal - monterDame;
+
+            },
+            startNewgame(){
+                this.isNewgame = true;
+                this.slayerHeal = 100;
+                this.monterHeal = 100;
+                this.resulMessage = "";
             }
-        })
+        }
+    })
     </script>
 </body>
 
