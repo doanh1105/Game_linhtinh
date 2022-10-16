@@ -43,8 +43,8 @@
             <div class="small-12 columns">
                 <button id="attack" @click="attack()" >ATTACK</button>
                 <button id="special-attack">SPECIAL ATTACK</button>
-                <button id="heal">HEAL</button>
-                <button id="give-up">GIVE UP</button>
+                <button id="heal" :disabled="isHealed" @click="heal()">HEAL</button>
+                <button id="give-up" @click="giveup()">GIVE UP</button>
             </div>
         </section>
         <section class="row log">
@@ -65,6 +65,7 @@
               isNewgame: false,
               slayerHeal: 100,
               monterHeal: 100,
+              isHealed: false,
               resulMessage:''
               
             },
@@ -87,11 +88,11 @@
                     // this.slayerHeal = this.slayerHeal - 20;
                 },
                 slayerAttackDame(){
-                    let slayerDame = Math.floor(Math.random() * 101); // dam khanh 10 dame
+                    let slayerDame = Math.floor(Math.random() * 51); // dam khanh 10 dame
                     this.monterHeal = this.monterHeal - slayerDame;
                 },
                 monterAttackDame(){
-                    let monterDame = Math.floor(Math.random() * 21); // dam ngat 10 dame
+                    let monterDame = Math.floor(Math.random() * 71); // dam ngat 10 dame
                     this.slayerHeal = this.slayerHeal - monterDame;
 
             },
@@ -100,6 +101,22 @@
                 this.slayerHeal = 100;
                 this.monterHeal = 100;
                 this.resulMessage = "";
+            },
+            giveup(){
+
+                if(confirm("Ban bo cuoc?")){
+                    this.slayerHeal = 0;
+                    this.resulMessage = "Thua"
+                    this.isNewgame = false;
+                    return;
+                }
+            },
+            heal(){
+                this.isHealed = true;
+                this.monsterHeal += 50;
+                if(this.monsterHeal > 100) this.monsterHeal = 100;
+                this.slayerHeal += 50;
+                if(this.slayerHeal > 100) this.slayerHeal = 100;
             }
         }
     })
